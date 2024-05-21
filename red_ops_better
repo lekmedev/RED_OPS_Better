@@ -137,42 +137,7 @@ def main():
             print("Please edit the configuration file: {0}".format(args.config))
             os._exit(0)
     finally:
-        print("Password Must include Minimum length (10), Capital and lower letter, number and special character")
-        password_provided = getpass("Provide a Password for Encry and Decrp: ")  # This is input in the form of a string        
-        count = 0
-        while count < 1:
-            if(any(x.isupper() for x in password_provided) and any(x.islower() for x in password_provided) and any(x.isdigit() for x in password_provided) and len(password_provided) >= 10):
-                password_provided = password_provided
-                count += 1
-            else:
-                print("Password Must include Minimum length (10), Capital and lower letter, number and special character.")
-                password_provided = getpass("Provide a Password for Encry and Decrp: ")                
-            
-        password = password_provided.encode()  # Convert to type bytes
-
-        #CHANGE THIS - Recommend--To Change os.urandom(16), must be of type bytes
-        #$python3.6 >>> import os >>> os.urandom(16) (Copy Output and Replace salt value)
-        salt = b'\xcfFI\xe8lgR\xdf!tt\xeeO\xc6\x12l\x13\xfa:\xf2\x13p\xfed\xca\x00\xfcb\xfe_`\xce=0\t\xbcRS[\xa7e)P\xeb\nrO&Z\x16\x9dvV;\x84q\x1d\xc7\x17Hq\x11\x8e\xca'  
-        kdf = PBKDF2HMAC(
-            algorithm=hashes.SHA256(),
-            length=32,
-            salt=salt,
-            iterations=1000000,
-            backend=default_backend()
-            )
-        key = base64.urlsafe_b64encode(kdf.derive(password)) 
-        cipher = Fernet(key)
-
-        if exists(authFile) and not exists(authFile_enc):
-            file_response = cred_file_encrypt_decryption(cipher, authFile, OrderedDict_dict, encry_decry=1)
-            if exists(authFile):
-                os.remove(authFile) 
-
-        elif exists(authFile_enc):
-            file_response = cred_file_encrypt_decryption(cipher, authFile_enc, encry_decry=0)
-            if exists(authFile):
-                os.remove(authFile)
-             
+        file_response = dictConfig
         TrackerArgs = args.tracker.upper()
         if TrackerArgs == 'RED':
             config_dict = file_response['RED']
@@ -416,6 +381,4 @@ def main():
         pickle.dump(seen, open(args.cache, 'wb'))
 
 if __name__ == "__main__":
-    authFile = "config" 
-    authFile_enc = "config.enc"
     main()
